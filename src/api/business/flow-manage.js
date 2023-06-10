@@ -17,18 +17,16 @@ export function addBill(data) {
   })
 }
 
-
-
 // 通过id获取流水
 export function getBillById(data, id) {
   return request({
     url: '/api/v1/xa-bill/' + id,
-    method: 'gt',  
+    method: 'gt',
     data
   })
 }
 
-// 修改行程
+// 修改流水
 export function updateBill(data, id) {
   return request({
     url: '/api/v1/xa-bill/' + id,
@@ -37,9 +35,7 @@ export function updateBill(data, id) {
   })
 }
 
-
-
-// 删除发票
+// 删除流水
 export function delBill(data) {
   return request({
     url: '/api/v1/xa-bill',

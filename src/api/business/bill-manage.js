@@ -17,18 +17,23 @@ export function addInvoice(data) {
   })
 }
 
-
-
 // 审核发票
 export function reviewInvoice(data, id) {
   return request({
     url: '/api/v1/xa-invoice/review/' + id,
-    method: 'post',  
+    method: 'post',
     data
   })
 }
 
-
+// 修改发票
+export function updateInvoice(data, id) {
+  return request({
+    url: '/api/v1/xa-invoice/' + id,
+    method: 'put',
+    data
+  })
+}
 
 // 删除发票
 export function delInvoice(data) {
