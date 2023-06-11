@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div id="particles-js">
-      <!-- <vue-particles
+      <vue-particles
         v-if="refreshParticles"
         color="#dedede"
         :particle-opacity="0.7"
@@ -18,12 +18,11 @@
         hover-mode="grab"
         :click-effect="true"
         click-mode="push"
-      /> -->
+      />
     </div>
 
     <div class="login-weaper animated bounceInDown">
       <div class="login-left">
-        <div class="login-time" v-text="currentTime" />
         <img :src="sysInfo.sys_app_logo" alt="" class="img">
         <p class="title" v-text="sysInfo.sys_app_name" />
       </div>
@@ -182,7 +181,6 @@
 
 <script>
 import { getCodeImg } from '@/api/login'
-import moment from 'moment'
 import SocialSign from './components/SocialSignin'
 
 export default {
@@ -194,8 +192,8 @@ export default {
       cookiePassword: '',
       refreshParticles: true,
       loginForm: {
-        username: 'admin',
-        password: '123456',
+        username: '',
+        password: '',
         rememberMe: false,
         code: '',
         uuid: ''
@@ -217,7 +215,6 @@ export default {
       showDialog: false,
       redirect: undefined,
       otherQuery: {},
-      currentTime: null,
       sysInfo: ''
     }
   },
@@ -236,7 +233,6 @@ export default {
   created() {
     this.getCode()
     // window.addEventListener('storage', this.afterQRScan)
-    this.getCurrentTime()
     this.getSystemSetting()
   },
   mounted() {
@@ -262,11 +258,7 @@ export default {
         document.title = ret.sys_app_name
       })
     },
-    getCurrentTime() {
-      this.timer = setInterval((_) => {
-        this.currentTime = moment().format('YYYY-MM-DD HH时mm分ss秒')
-      }, 1000)
-    },
+
     getCode() {
       getCodeImg().then((res) => {
         if (res !== undefined) {

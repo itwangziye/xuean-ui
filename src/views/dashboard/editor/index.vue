@@ -5,29 +5,27 @@
         Your roles:
         <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span>
       </pan-thumb>
-      <github-corner style="position: absolute; top: 0px; border: 0; right: 0;" />
       <div class="info-container">
         <span class="display_name">{{ name }}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's Dashboard</span>
+        <div class="login-time" v-text="currentTime" />
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">欢迎回来~</span>
       </div>
     </div>
-    <div>
-      <img :src="emptyGif" class="emptyGif">
-    </div>
+    <div />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
-import GithubCorner from '@/components/GithubCorner'
+import moment from 'moment'
 
 export default {
   name: 'DashboardEditor',
-  components: { PanThumb, GithubCorner },
+  components: { PanThumb },
   data() {
     return {
-      emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3'
+      currentTime: null
     }
   },
   computed: {
@@ -36,6 +34,16 @@ export default {
       'avatar',
       'roles'
     ])
+  },
+  created() {
+    this.getCurrentTime()
+  },
+  methods: {
+    getCurrentTime() {
+      this.timer = setInterval((_) => {
+        this.currentTime = moment().format('YYYY-MM-DD HH时mm分ss秒')
+      }, 1000)
+    }
   }
 }
 </script>
@@ -61,7 +69,10 @@ export default {
       position: relative;
       margin-left: 190px;
       height: 150px;
-      line-height: 200px;
+      .login-time {
+        padding-top: 95px;
+        font-size: 20px;
+      }
       .display_name {
         font-size: 48px;
         line-height: 48px;
