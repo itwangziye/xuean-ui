@@ -62,7 +62,7 @@
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button
-              v-permisaction="['admin:sysRole:add']"
+              v-permisaction="['business:billManage:add']"
               type="primary"
               icon="el-icon-plus"
               size="mini"
@@ -71,7 +71,7 @@
           </el-col>
           <el-col :span="1.5">
             <el-button
-              v-permisaction="['admin:sysRole:export']"
+              v-permisaction="['business:billManage:export']"
               type="warning"
               icon="el-icon-download"
               size="mini"
@@ -106,16 +106,17 @@
           >
             <template slot-scope="{row}">
               <el-button v-if="row.invoiceStatus == 1" v-permission="['admin']" size="mini" type="text" @click="handleConfirmBill(row)">确认发票</el-button>
-
               <el-button
-                v-permisaction="['admin:sysRole:update']"
+                v-if="checkPermission(['admin']) && Number(row.billStatus) === 1 || Number(row.invoiceStatus) === 3"
+                v-permisaction="['business:billManage:edit']"
                 size="mini"
                 type="text"
                 @click="handleUpdate(row)"
               >修改</el-button>
 
               <el-button
-                v-permisaction="['admin:sysRole:remove']"
+                v-if="checkPermission(['admin'])"
+                v-permisaction="['business:billManage:delete']"
                 size="mini"
                 type="text"
                 @click="handleDelete(row)"
@@ -143,6 +144,7 @@
 import { getInvoiceList, delInvoice, reviewInvoice } from '@/api/business/bill-manage'
 import { formatJson } from '@/utils'
 import OpenBill from '../components/open-bill.vue'
+import checkPermission from '@/utils/permission'
 
 export default {
   name: 'BillManage',
@@ -182,6 +184,9 @@ export default {
     this.getList()
   },
   methods: {
+    checkPermission(params) {
+      return checkPermission(params)
+    },
     /** 查询角色列表 */
     getList() {
       this.loading = true

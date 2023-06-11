@@ -84,7 +84,7 @@
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button
-              v-permisaction="['admin:sysRole:add']"
+              v-permisaction="['business:travelManage:add']"
               type="primary"
               icon="el-icon-plus"
               size="mini"
@@ -93,7 +93,7 @@
           </el-col>
           <el-col :span="1.5">
             <el-button
-              v-permisaction="['admin:sysRole:export']"
+              v-permisaction="['business:travelManage:export']"
               type="warning"
               icon="el-icon-download"
               size="mini"
@@ -102,7 +102,7 @@
           </el-col>
           <el-col :span="1.5">
             <el-button
-              v-permisaction="['admin:sysRole:update']"
+              v-permisaction="['business:flowManage:add']"
               type="success"
               icon="el-icon-edit"
               size="mini"
@@ -111,14 +111,13 @@
           </el-col>
           <el-col :span="1.5">
             <el-button
-              v-permisaction="['admin:sysRole:remove']"
+              v-permisaction="['business:billManage:add']"
               type="danger"
               icon="el-icon-document-copy"
               size="mini"
               @click="handleOpenBill"
             >开票</el-button>
           </el-col>
-
         </el-row>
 
         <el-table v-loading="loading" :data="tableData" border @selection-change="handleSelectionChange">
@@ -151,10 +150,10 @@
           <el-table-column label="操作" align="left" class-name="small-padding fixed-width" width="220">
             <template slot-scope="{row}">
               <el-button v-if="Number(row.tripStatus) === 1" v-permission="['admin']" size="mini" type="text" @click="handleConfirmTravel(row)">确认行程</el-button>
-              <el-button v-if="Number(row.isSettle) === 1 && Number(row.tripStatus) === 2" v-permisaction="['admin:sysRole:update']" size="mini" type="text" @click="handleSettlement(row)">结算</el-button>
-              <el-button v-if="Number(row.isInvoicing) === 1 && Number(row.tripStatus) === 2" v-permisaction="['admin:sysRole:update']" size="mini" type="text" @click="handleOpenBill(row)">开票</el-button>
-              <el-button v-permisaction="['admin:sysRole:update']" size="mini" type="text" @click="handleUpdate(row)">修改</el-button>
-              <el-button v-permisaction="['admin:sysRole:remove']" size="mini" type="text" @click="handleDelete(row)">删除</el-button>
+              <el-button v-if="Number(row.isSettle) === 1 && Number(row.tripStatus) === 2" v-permisaction="['business:flowManage:add']" size="mini" type="text" @click="handleSettlement(row)">结算</el-button>
+              <el-button v-if="Number(row.isInvoicing) === 1 && Number(row.tripStatus) === 2" v-permisaction="['business:billManage:add']" size="mini" type="text" @click="handleOpenBill(row)">开票</el-button>
+              <el-button v-if="Number(row.tripStatus) !== 1" v-permisaction="['business:travelManage:edit']" size="mini" type="text" @click="handleUpdate(row)">修改</el-button>
+              <el-button v-if="checkPermission(['admin'])" v-permisaction="['business:travelManage:delete']" size="mini" type="text" @click="handleDelete(row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -281,6 +280,7 @@ import { getTripList, addTrip, updateTrip, delTrip, reviewTrip } from '@/api/bus
 import { formatJson } from '@/utils'
 import OpenBill from '../components/open-bill.vue'
 import SettleDialog from '../components/settle-dialog.vue'
+import checkPermission from '@/utils/permission'
 
 export default {
   name: 'TravelManage',
@@ -339,6 +339,9 @@ export default {
     this.getList()
   },
   methods: {
+    checkPermission(params) {
+      return checkPermission(params)
+    },
     /** 查询角色列表 */
     getList() {
       this.loading = true

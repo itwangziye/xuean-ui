@@ -102,7 +102,7 @@
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button
-              v-permisaction="['admin:sysRole:add']"
+              v-permisaction="['business:flowManage:add']"
               type="primary"
               icon="el-icon-plus"
               size="mini"
@@ -149,14 +149,16 @@
             <template slot-scope="{row}">
               <el-button v-if="row.billStatus == 1" v-permission="['admin']" size="mini" type="text" @click="handleConfirmFlow(row)">确认流水</el-button>
               <el-button
-                v-permisaction="['admin:sysRole:update']"
+                v-if="checkPermission(['admin']) && Number(row.billStatus) === 1 || Number(row.billStatus) === 3"
+                v-permisaction="['business:flowManage:edit']"
                 size="mini"
                 type="text"
                 @click="handleUpdate(row)"
               >修改</el-button>
 
               <el-button
-                v-permisaction="['admin:sysRole:remove']"
+                v-if="checkPermission(['admin'])"
+                v-permisaction="['business:flowManage:delete']"
                 size="mini"
                 type="text"
                 @click="handleDelete(row)"
@@ -184,6 +186,7 @@
 import { getBillList, delBill, reviewBill } from '@/api/business/flow-manage'
 import { formatJson } from '@/utils'
 import SettleDialog from '../components/settle-dialog.vue'
+import checkPermission from '@/utils/permission'
 
 export default {
   name: 'FlowManage',
@@ -236,6 +239,9 @@ export default {
     this.getList()
   },
   methods: {
+    checkPermission(params) {
+      return checkPermission(params)
+    },
     /** 查询角色列表 */
     getList() {
       this.loading = true
