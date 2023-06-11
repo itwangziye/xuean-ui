@@ -64,25 +64,13 @@
             />
           </el-form-item>
           <el-form-item label="是否结算" prop="isSettle">
-            <el-select
-              v-model="queryParams.isSettle"
-              placeholder="请选择"
-              clearable
-              size="small"
-              style="width: 160px"
-            >
+            <el-select v-model="queryParams.isSettle" placeholder="请选择" clearable size="small" style="width: 160px">
               <el-option label="是" value="2" />
               <el-option label="否" value="1" />
             </el-select>
           </el-form-item>
           <el-form-item label="是否开票" prop="isInvoicing">
-            <el-select
-              v-model="queryParams.isInvoicing"
-              placeholder="请选择"
-              clearable
-              size="small"
-              style="width: 160px"
-            >
+            <el-select v-model="queryParams.isInvoicing" placeholder="请选择" clearable size="small" style="width: 160px">
               <el-option label="是" value="2" />
               <el-option label="否" value="1" />
             </el-select>
@@ -133,12 +121,7 @@
 
         </el-row>
 
-        <el-table
-          v-loading="loading"
-          :data="tableData"
-          border
-          @selection-change="handleSelectionChange"
-        >
+        <el-table v-loading="loading" :data="tableData" border @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center" />
           <el-table-column label="行程编号" prop="tripId" width="180" />
           <el-table-column label="用车联系人" prop="carLink" min-width="100" :show-overflow-tooltip="true" />
@@ -148,77 +131,70 @@
           <el-table-column label="单位经办人" prop="operatorName" min-width="100" :show-overflow-tooltip="true" />
           <el-table-column label="应付金额(￥)" prop="preMoney" width="100" />
           <el-table-column label="实付金额(￥)" prop="payMoney" width="100" />
-          <el-table-column label="是否结算" prop="isSettle" width="80" :formatter="(row, column, cellValue, index) => cellValue == 2 ? '是': '否'" />
-          <el-table-column label="是否开票" prop="isInvoicing" width="80" :formatter="(row, column, cellValue, index) => cellValue == 2 ? '是': '否'" />
+          <el-table-column
+            label="是否结算"
+            prop="isSettle"
+            width="80"
+            :formatter="(row, column, cellValue, index) => Number(cellValue) === 2 ? '是' : '否'"
+          />
+          <el-table-column
+            label="是否开票"
+            prop="isInvoicing"
+            width="80"
+            :formatter="(row, column, cellValue, index) => Number(cellValue) === 2 ? '是' : '否'"
+          />
           <el-table-column label="创建时间" prop="createdAt" width="180">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.createdAt) }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="操作"
-            align="left"
-            class-name="small-padding fixed-width"
-            width="220"
-          >
+          <el-table-column label="操作" align="left" class-name="small-padding fixed-width" width="220">
             <template slot-scope="{row}">
-              <el-button
-                v-if="row.isSettle == 1"
-                v-permisaction="['admin:sysRole:update']"
-                size="mini"
-                type="text"
-                @click="handleSettlement(row)"
-              >结算</el-button>
-              <el-button
-                v-if="row.isInvoicing == 1"
-                v-permisaction="['admin:sysRole:update']"
-                size="mini"
-                type="text"
-                @click="handleOpenBill(row)"
-              >开票</el-button>
-              <el-button
-                v-permisaction="['admin:sysRole:update']"
-                size="mini"
-                type="text"
-                @click="handleUpdate(row)"
-              >修改</el-button>
-              <el-button
-                v-permisaction="['admin:sysRole:remove']"
-                size="mini"
-                type="text"
-                @click="handleDelete(row)"
-              >删除</el-button>
+              <el-button v-if="Number(row.tripStatus) === 1" v-permission="['admin']" size="mini" type="text" @click="handleConfirmTravel(row)">确认行程</el-button>
+              <el-button v-if="Number(row.isSettle) === 1 && Number(row.tripStatus) === 2" v-permisaction="['admin:sysRole:update']" size="mini" type="text" @click="handleSettlement(row)">结算</el-button>
+              <el-button v-if="Number(row.isInvoicing) === 1 && Number(row.tripStatus) === 2" v-permisaction="['admin:sysRole:update']" size="mini" type="text" @click="handleOpenBill(row)">开票</el-button>
+              <el-button v-permisaction="['admin:sysRole:update']" size="mini" type="text" @click="handleUpdate(row)">修改</el-button>
+              <el-button v-permisaction="['admin:sysRole:remove']" size="mini" type="text" @click="handleDelete(row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
 
-        <pagination
-          v-show="total>0"
-          :total="total"
-          :page.sync="queryParams.pageIndex"
-          :limit.sync="queryParams.pageSize"
-          @pagination="getList"
-        />
+        <div class="home__footer">
+          <div class="table__footer">
+            <span>总计应收金额（￥）： {{ totalMoney.money1 }} </span>
+            <span>总计实收金额（￥）： {{ totalMoney.money2 }} </span>
+            <span>总计未收金额（￥）： {{ totalMoney.money3 }}</span>
+          </div>
+
+          <pagination
+            v-show="total > 0"
+            class="pagination__footer"
+            :total="total"
+            :page.sync="queryParams.pageIndex"
+            :limit.sync="queryParams.pageSize"
+            @pagination="getList"
+          />
+        </div>
 
         <!-- 添加或修改行程配置对话框 -->
         <el-dialog v-if="open" :title="title" :visible.sync="open" width="500px" :close-on-click-modal="false">
           <el-form ref="form" class="add__form" :model="form" label-width="100px">
-            <el-form-item label="用车联系人" prop="carLink" :rules="[{required: true, message: '请输入用车联系人'}]">
+            <el-form-item label="用车联系人" prop="carLink" :rules="[{ required: true, message: '请输入用车联系人' }]">
               <el-input v-model="form.carLink" placeholder="请输入用车联系人" />
             </el-form-item>
-            <el-form-item label="行程" prop="tripName" :rules="[{required: true, message: '请输入行程'}]">
+            <el-form-item label="行程" prop="tripName" :rules="[{ required: true, message: '请输入行程' }]">
               <el-input v-model="form.tripName" placeholder="请输入行程" />
             </el-form-item>
-            <el-form-item label="车辆编号" prop="carId" :rules="[{required: true, message: '请输入车辆编号'}]">
+            <el-form-item label="车辆编号" prop="carId" :rules="[{ required: true, message: '请输入车辆编号' }]">
               <el-input v-model="form.carId" placeholder="请输入车辆编号" />
             </el-form-item>
-            <el-form-item label="司机姓名" prop="driverName" :rules="[{required: true, message: '请输入司机姓名'}]">
+            <el-form-item label="司机姓名" prop="driverName" :rules="[{ required: true, message: '请输入司机姓名' }]">
               <el-input v-model="form.driverName" placeholder="请输入司机姓名" />
             </el-form-item>
-            <el-form-item label="单位经办人" prop="operatorName" :rules="[{required: true, message: '请输入单位经办人'}]">
+            <el-form-item label="单位经办人" prop="operatorName" :rules="[{ required: true, message: '请输入单位经办人' }]">
               <el-input v-model="form.operatorName" placeholder="请输入单位经办人" />
             </el-form-item>
-            <el-form-item label="应付金额(￥)" prop="preMoney" :rules="[{required: true, message: '请输入应付金额(￥)'}]">
+            <el-form-item label="应付金额(￥)" prop="preMoney" :rules="[{ required: true, message: '请输入应付金额(￥)' }]">
               <el-input-number v-model="form.preMoney" controls-position="right" :min="0" />
             </el-form-item>
             <el-form-item label="是否结算" prop="isSettle">
@@ -228,7 +204,13 @@
               </el-radio-group>
             </el-form-item>
 
-            <el-form-item v-if="form.isSettle == 2" class="sub__form__item" label="实付金额" prop="payMoney" :rules="[{required: true, message: '请输入实付金额'}]">
+            <el-form-item
+              v-if="form.isSettle == 2"
+              class="sub__form__item"
+              label="实付金额"
+              prop="payMoney"
+              :rules="[{ required: true, message: '请输入实付金额' }]"
+            >
               <el-input v-model="form.payMoney" placeholder="请输入实付金额" />
             </el-form-item>
 
@@ -240,13 +222,28 @@
             </el-form-item>
 
             <template v-if="form.isInvoicing == 2">
-              <el-form-item class="sub__form__item" label="发票号码" prop="invoiceId" :rules="[{required: true, message: '请输入发票号码'}]">
+              <el-form-item
+                class="sub__form__item"
+                label="发票号码"
+                prop="invoiceId"
+                :rules="[{ required: true, message: '请输入发票号码' }]"
+              >
                 <el-input v-model="form.invoiceId" placeholder="请输入发票号码" />
               </el-form-item>
-              <el-form-item class="sub__form__item" label="发票单位" prop="invoiceCompany" :rules="[{required: true, message: '请输入发票单位'}]">
+              <el-form-item
+                class="sub__form__item"
+                label="发票单位"
+                prop="invoiceCompany"
+                :rules="[{ required: true, message: '请输入发票单位' }]"
+              >
                 <el-input v-model="form.invoiceCompany" placeholder="请输入发票单位" />
               </el-form-item>
-              <el-form-item class="sub__form__item" label="发票金额(￥)" prop="money" :rules="[{required: true, message: '请输入发票金额(￥)'}]">
+              <el-form-item
+                class="sub__form__item"
+                label="发票金额(￥)"
+                prop="money"
+                :rules="[{ required: true, message: '请输入发票金额(￥)' }]"
+              >
                 <el-input v-model="form.money" placeholder="请输入发票金额(￥)" />
               </el-form-item>
               <el-form-item class="sub__form__item" label="备注" prop="remark">
@@ -266,7 +263,13 @@
 
         <open-bill title="开票" :visible.sync="openBillVisible" :source="selectTravelOptions" @reflash="getList" />
 
-        <settle-dialog title="结算" bill-type="1" :visible.sync="settleDialogVisible" :source="selectTravelOptions" @reflash="getList" />
+        <settle-dialog
+          title="结算"
+          bill-type="1"
+          :visible.sync="settleDialogVisible"
+          :source="selectTravelOptions"
+          @reflash="getList"
+        />
 
       </el-card>
     </template>
@@ -274,7 +277,7 @@
 </template>
 
 <script>
-import { getTripList, addTrip, updateTrip, delTrip } from '@/api/business/travel-manage'
+import { getTripList, addTrip, updateTrip, delTrip, reviewTrip } from '@/api/business/travel-manage'
 import { formatJson } from '@/utils'
 import OpenBill from '../components/open-bill.vue'
 import SettleDialog from '../components/settle-dialog.vue'
@@ -316,7 +319,8 @@ export default {
       // 表单参数
       form: {},
       openBillVisible: false,
-      settleDialogVisible: false
+      settleDialogVisible: false,
+      totalMoney: {}
     }
   },
   computed: {
@@ -342,6 +346,7 @@ export default {
         response => {
           this.tableData = response.data.list
           this.total = response.data.count
+          this.totalMoney = response.data.totalMoney
           this.loading = false
         }
       )
@@ -369,6 +374,29 @@ export default {
         isInvoicing: '1' // 是否开票，1未开票，2已开票
       }
       this.resetForm('form')
+    },
+    reviewTripReq(params, id) {
+      reviewTrip(params, id).then(response => {
+        if (response.code === 200) {
+          this.msgSuccess(response.msg)
+          this.getList()
+        } else {
+          this.msgError(response.msg)
+        }
+      })
+    },
+
+    // 确认行程
+    handleConfirmTravel(row) {
+      this.$confirm('是否确认该行程?', '警告', {
+        confirmButtonText: '通过',
+        cancelButtonText: '不通过',
+        type: 'warning'
+      }).then(() => {
+        this.reviewTripReq({ tripStatus: '2' }, row.id)
+      }).catch(function() {
+        this.reviewTripReq({ tripStatus: '3' }, row.id)
+      })
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -459,25 +487,35 @@ export default {
       }).then((response) => {
         this.getList()
         this.msgSuccess(response.msg)
-      }).catch(function() {})
+      }).catch(function() { })
+    },
+    buildExportData(data) {
+      const flagData = JSON.parse(JSON.stringify(data))
+      return flagData.map(item => {
+        const { isInvoicing, isSettle, createdAt } = item
+        item.isInvoicing = Number(isInvoicing) === 2 ? '是' : '否'
+        item.isSettle = Number(isSettle) === 2 ? '是' : '否'
+        item.createdAt = this.parseTime(createdAt)
+        return item
+      })
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.$confirm('是否确认导出所有角色数据项?', '警告', {
+      this.$confirm('是否确认导出所有行程数据项?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['角色编号', '角色名称', '权限字符', '显示顺序', '状态', '创建时间']
-          const filterVal = ['roleId', 'roleName', 'roleKey', 'roleSort', 'status', 'createdAt']
-          const list = this.tableData
+          const tHeader = ['行程编号', '用车联系人', '行程', '车辆编号', '司机姓名', '单位经办人', '应付金额(￥)', '实付金额', '是否结算', '是否开票', '创建时间']
+          const filterVal = ['tripId', 'carLink', 'tripName', 'carId', 'driverName', 'operatorName', 'preMoney', 'payMoney', 'isSettle', 'isInvoicing', 'createdAt']
+          const list = this.buildExportData(this.tableData)
           const data = formatJson(filterVal, list)
           excel.export_json_to_excel({
             header: tHeader,
             data,
-            filename: '角色管理',
+            filename: '行程管理',
             autoWidth: true, // Optional
             bookType: 'xlsx' // Optional
           })
@@ -489,11 +527,26 @@ export default {
 }
 </script>
 
-<style lang="scss">
-  .add__form {
-    .sub__form__item {
-      padding-left: 80px;
-    }
+<style lang="scss" scoped>
+.add__form {
+  .sub__form__item {
+    padding-left: 80px;
   }
+}
 
+.home__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 32px;
+  .table__footer {
+    font-size: 14px;
+    padding: 30px 20px 10px 0;
+  }
+  .pagination__footer {
+    flex: 1;
+    margin: 0;
+    height: 32px;
+  }
+}
 </style>

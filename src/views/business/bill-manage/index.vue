@@ -104,19 +104,21 @@
             class-name="small-padding fixed-width"
             width="220"
           >
-            <template slot-scope="scope">
+            <template slot-scope="{row}">
+              <el-button v-if="row.invoiceStatus == 1" v-permission="['admin']" size="mini" type="text" @click="handleConfirmBill(row)">确认发票</el-button>
+
               <el-button
                 v-permisaction="['admin:sysRole:update']"
                 size="mini"
                 type="text"
-                @click="handleUpdate(scope.row)"
+                @click="handleUpdate(row)"
               >修改</el-button>
 
               <el-button
                 v-permisaction="['admin:sysRole:remove']"
                 size="mini"
                 type="text"
-                @click="handleDelete(scope.row)"
+                @click="handleDelete(row)"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -138,7 +140,7 @@
 </template>
 
 <script>
-import { getInvoiceList, delInvoice } from '@/api/business/bill-manage'
+import { getInvoiceList, delInvoice, reviewInvoice } from '@/api/business/bill-manage'
 import { formatJson } from '@/utils'
 import OpenBill from '../components/open-bill.vue'
 
@@ -190,6 +192,27 @@ export default {
           this.loading = false
         }
       )
+    },
+    reviewInvoiceReq(params, id) {
+      reviewInvoice(params, id).then(response => {
+        if (response.code === 200) {
+          this.msgSuccess(response.msg)
+          this.getList()
+        } else {
+          this.msgError(response.msg)
+        }
+      })
+    },
+    handleConfirmBill(row) {
+      this.$confirm('是否确认该发票?', '警告', {
+        confirmButtonText: '通过',
+        cancelButtonText: '不通过',
+        type: 'warning'
+      }).then(() => {
+        this.reviewInvoiceReq({ invoiceStatus: '2' }, row.id)
+      }).catch(function() {
+        this.reviewInvoiceReq({ invoiceStatus: '3' }, row.id)
+      })
     },
     /** 搜索按钮操作 */
     handleQuery() {

@@ -146,19 +146,20 @@
             class-name="small-padding fixed-width"
             width="220"
           >
-            <template slot-scope="scope">
+            <template slot-scope="{row}">
+              <el-button v-if="row.billStatus == 1" v-permission="['admin']" size="mini" type="text" @click="handleConfirmFlow(row)">确认流水</el-button>
               <el-button
                 v-permisaction="['admin:sysRole:update']"
                 size="mini"
                 type="text"
-                @click="handleUpdate(scope.row)"
+                @click="handleUpdate(row)"
               >修改</el-button>
 
               <el-button
                 v-permisaction="['admin:sysRole:remove']"
                 size="mini"
                 type="text"
-                @click="handleDelete(scope.row)"
+                @click="handleDelete(row)"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -180,7 +181,7 @@
 </template>
 
 <script>
-import { getBillList, delBill } from '@/api/business/flow-manage'
+import { getBillList, delBill, reviewBill } from '@/api/business/flow-manage'
 import { formatJson } from '@/utils'
 import SettleDialog from '../components/settle-dialog.vue'
 
@@ -245,6 +246,28 @@ export default {
           this.loading = false
         }
       )
+    },
+    reviewFlowReq(params, id) {
+      reviewBill(params, id).then(response => {
+        if (response.code === 200) {
+          this.msgSuccess(response.msg)
+          this.getList()
+        } else {
+          this.msgError(response.msg)
+        }
+      })
+    },
+    // 确认行程
+    handleConfirmFlow(row) {
+      this.$confirm('是否确认该流水?', '警告', {
+        confirmButtonText: '通过',
+        cancelButtonText: '不通过',
+        type: 'warning'
+      }).then(() => {
+        this.reviewFlowReq({ billStatus: '2' }, row.id)
+      }).catch(function() {
+        this.reviewFlowReq({ billStatus: '3' }, row.id)
+      })
     },
     /** 搜索按钮操作 */
     handleQuery() {

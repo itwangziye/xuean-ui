@@ -43,3 +43,12 @@ export function delBill(data) {
     data
   })
 }
+// 审核流水
+// billStatus 审核参数，2审核通过，3审核失败
+export function reviewBill(data, id) {
+  return request({
+    url: '/api/v1/xa-bill/review/' + id,
+    method: 'post',
+    data
+  })
+}
