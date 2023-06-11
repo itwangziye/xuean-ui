@@ -265,21 +265,21 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.$confirm('是否确认导出所有角色数据项?', '警告', {
+      this.$confirm('是否确认导出所有发票?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['角色编号', '角色名称', '权限字符', '显示顺序', '状态', '创建时间']
-          const filterVal = ['roleId', 'roleName', 'roleKey', 'roleSort', 'status', 'createdAt']
+          const tHeader = ['发票号码', '关联行程', '发票单位', '发票金额（￥）', '发票备注', '创建时间']
+          const filterVal = ['invoiceId', 'tripId', 'invoiceCompany', 'money', 'remark', 'createdAt']
           const list = this.tableData
           const data = formatJson(filterVal, list)
           excel.export_json_to_excel({
             header: tHeader,
             data,
-            filename: '角色管理',
+            filename: '发票管理',
             autoWidth: true, // Optional
             bookType: 'xlsx' // Optional
           })
