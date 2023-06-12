@@ -10,6 +10,7 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              value-format="yyyy-MM-dd"
               size="small"
             />
           </el-form-item>
@@ -92,7 +93,7 @@
           <el-table-column label="关联行程" prop="tripId" min-width="180" />
           <el-table-column label="发票单位" prop="invoiceCompany" min-width="180" />
           <el-table-column label="发票金额(￥)" prop="money" width="100" />
-          <el-table-column label="发票备注" prop="remark" min-width="100" :show-overflow-tooltip="true" />
+          <el-table-column label="发票备注" prop="remark" min-width="200" :show-overflow-tooltip="true" />
           <el-table-column label="创建时间" prop="createdAt" width="180">
             <template slot-scope="{row}">
               <span>{{ parseTime(row.createdAt) }}</span>
@@ -215,7 +216,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.reviewInvoiceReq({ invoiceStatus: '2' }, row.id)
-      }).catch(function() {
+      }).catch(() => {
         this.reviewInvoiceReq({ invoiceStatus: '3' }, row.id)
       })
     },

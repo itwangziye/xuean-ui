@@ -11,6 +11,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               size="small"
+              value-format="yyyy-MM-dd"
             />
           </el-form-item>
           <el-form-item label="行程编号" prop="tripId">
@@ -426,7 +427,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.reviewTripReq({ tripStatus: '2' }, row.id)
-      }).catch(function() {
+      }).catch(() => {
         this.reviewTripReq({ tripStatus: '3' }, row.id)
       })
     },
@@ -573,6 +574,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   height: 32px;
+  flex-wrap: wrap;
   .table__footer {
     font-size: 14px;
     padding: 30px 20px 10px 0;

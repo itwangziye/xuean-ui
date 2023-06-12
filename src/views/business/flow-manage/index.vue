@@ -11,6 +11,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               size="small"
+              value-format="yyyy-MM-dd"
             />
           </el-form-item>
           <el-form-item label="流水编号" prop="billId">
@@ -33,7 +34,7 @@
             >
               <el-option label="全部" value="" />
               <el-option label="车费结算" value="1" />
-              <el-option label="反差" value="2" />
+              <el-option label="返差" value="2" />
             </el-select>
           </el-form-item>
           <el-form-item label="交易对象" prop="billObj">
@@ -107,7 +108,7 @@
               icon="el-icon-plus"
               size="mini"
               @click="handleAdd"
-            >新增反差</el-button>
+            >新增返差</el-button>
           </el-col>
           <!-- <el-col :span="1.5">
             <el-button
@@ -271,7 +272,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.reviewFlowReq({ billStatus: '2' }, row.id)
-      }).catch(function() {
+      }).catch(() => {
         this.reviewFlowReq({ billStatus: '3' }, row.id)
       })
     },
