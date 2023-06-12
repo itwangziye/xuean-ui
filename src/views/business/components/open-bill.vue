@@ -17,7 +17,7 @@
       <el-form-item label="发票单位" prop="invoiceCompany" :rules="[{required: true, message: '请输入发票单位'}]">
         <el-input v-model="form.invoiceCompany" placeholder="请输入发票单位" />
       </el-form-item>
-      <el-form-item label="发票金额(￥)" prop="money" :rules="[{required: true, message: '请输入发票金额(￥)'}]">
+      <el-form-item label="发票金额" prop="money" :rules="[{required: true, message: '请输入发票金额(￥)'}]">
         <el-input v-model="form.money" placeholder="请输入发票金额(￥)" />
       </el-form-item>
       <el-form-item label="备注" prop="remark">

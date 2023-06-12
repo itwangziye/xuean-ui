@@ -195,61 +195,64 @@
             <el-form-item label="单位经办人" prop="operatorName" :rules="[{ required: true, message: '请输入单位经办人' }]">
               <el-input v-model="form.operatorName" placeholder="请输入单位经办人" />
             </el-form-item>
-            <el-form-item label="应付金额(￥)" prop="preMoney" :rules="[{ required: true, message: '请输入应付金额(￥)' }]">
+            <el-form-item label="应付金额" prop="preMoney" :rules="[{ required: true, message: '请输入应付金额(￥)' }]">
               <el-input-number v-model="form.preMoney" controls-position="right" :min="0" />
             </el-form-item>
-            <el-form-item label="是否结算" prop="isSettle">
-              <el-radio-group v-model="form.isSettle">
-                <el-radio label="2">是</el-radio>
-                <el-radio label="1">否</el-radio>
-              </el-radio-group>
-            </el-form-item>
 
-            <el-form-item
-              v-if="form.isSettle == 2"
-              class="sub__form__item"
-              label="实付金额"
-              prop="payMoney"
-              :rules="[{ required: true, message: '请输入实付金额' }]"
-            >
-              <el-input v-model="form.payMoney" placeholder="请输入实付金额" />
-            </el-form-item>
+            <template v-if="!isEdit">
+              <el-form-item label="是否结算" prop="isSettle">
+                <el-radio-group v-model="form.isSettle">
+                  <el-radio label="2">是</el-radio>
+                  <el-radio label="1">否</el-radio>
+                </el-radio-group>
+              </el-form-item>
 
-            <el-form-item label="是否开票" prop="isInvoicing">
-              <el-radio-group v-model="form.isInvoicing">
-                <el-radio label="2">是</el-radio>
-                <el-radio label="1">否</el-radio>
-              </el-radio-group>
-            </el-form-item>
+              <el-form-item
+                v-if="form.isSettle == 2"
+                class="sub__form__item"
+                label="实付金额"
+                prop="payMoney"
+                :rules="[{ required: true, message: '请输入实付金额' }]"
+              >
+                <el-input v-model="form.payMoney" placeholder="请输入实付金额" />
+              </el-form-item>
 
-            <template v-if="form.isInvoicing == 2">
-              <el-form-item
-                class="sub__form__item"
-                label="发票号码"
-                prop="invoiceId"
-                :rules="[{ required: true, message: '请输入发票号码' }]"
-              >
-                <el-input v-model="form.invoiceId" placeholder="请输入发票号码" />
+              <el-form-item label="是否开票" prop="isInvoicing">
+                <el-radio-group v-model="form.isInvoicing">
+                  <el-radio label="2">是</el-radio>
+                  <el-radio label="1">否</el-radio>
+                </el-radio-group>
               </el-form-item>
-              <el-form-item
-                class="sub__form__item"
-                label="发票单位"
-                prop="invoiceCompany"
-                :rules="[{ required: true, message: '请输入发票单位' }]"
-              >
-                <el-input v-model="form.invoiceCompany" placeholder="请输入发票单位" />
-              </el-form-item>
-              <el-form-item
-                class="sub__form__item"
-                label="发票金额(￥)"
-                prop="money"
-                :rules="[{ required: true, message: '请输入发票金额(￥)' }]"
-              >
-                <el-input v-model="form.money" placeholder="请输入发票金额(￥)" />
-              </el-form-item>
-              <el-form-item class="sub__form__item" label="备注" prop="remark">
-                <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
-              </el-form-item>
+
+              <template v-if="form.isInvoicing == 2">
+                <el-form-item
+                  class="sub__form__item"
+                  label="发票号码"
+                  prop="invoiceId"
+                  :rules="[{ required: true, message: '请输入发票号码' }]"
+                >
+                  <el-input v-model="form.invoiceId" placeholder="请输入发票号码" />
+                </el-form-item>
+                <el-form-item
+                  class="sub__form__item"
+                  label="发票单位"
+                  prop="invoiceCompany"
+                  :rules="[{ required: true, message: '请输入发票单位' }]"
+                >
+                  <el-input v-model="form.invoiceCompany" placeholder="请输入发票单位" />
+                </el-form-item>
+                <el-form-item
+                  class="sub__form__item"
+                  label="发票金额"
+                  prop="money"
+                  :rules="[{ required: true, message: '请输入发票金额(￥)' }]"
+                >
+                  <el-input v-model="form.money" placeholder="请输入发票金额(￥)" />
+                </el-form-item>
+                <el-form-item class="sub__form__item" label="备注" prop="remark">
+                  <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
+                </el-form-item>
+              </template>
             </template>
 
             <!-- <el-form-item label="备注">

@@ -22,10 +22,10 @@
           <el-option label="对公账户" value="4" />
         </el-select>
       </el-form-item>
-      <el-form-item v-if="currentBillType == 1" label="实付金额(￥)" prop="income" :rules="[{required: true, message: '请输入实付金额(￥)'}]">
+      <el-form-item v-if="currentBillType == 1" label="实付金额" prop="income" :rules="[{required: true, message: '请输入实付金额(￥)'}]">
         <el-input v-model="form.income" placeholder="请输入实付金额(￥)" />
       </el-form-item>
-      <el-form-item v-else label="实付金额(￥)" prop="payOut" :rules="[{required: true, message: '请输入实付金额'}]">
+      <el-form-item v-else label="实付金额" prop="payOut" :rules="[{required: true, message: '请输入实付金额'}]">
         <el-input v-model="form.payOut" placeholder="请输入实付金额" />
       </el-form-item>
       <el-form-item label="经办人" prop="operatorName" :rules="[{required: true, message: '请输入经办人'}]">
