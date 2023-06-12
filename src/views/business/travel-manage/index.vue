@@ -45,7 +45,7 @@
           </el-form-item>
           <el-form-item label="司机姓名" prop="driverName">
             <el-input
-              v-model="queryParams.roleKey"
+              v-model="queryParams.driverName"
               placeholder="请输入司机姓名"
               clearable
               size="small"
@@ -106,6 +106,7 @@
               type="success"
               icon="el-icon-edit"
               size="mini"
+              :disabled="settlementDisabled"
               @click="handleSettlement"
             >结算</el-button>
           </el-col>
@@ -115,6 +116,7 @@
               type="danger"
               icon="el-icon-document-copy"
               size="mini"
+              :disabled="openBillDisabled"
               @click="handleOpenBill"
             >开票</el-button>
           </el-col>
@@ -260,7 +262,7 @@
           </div>
         </el-dialog>
 
-        <open-bill title="开票" :visible.sync="openBillVisible" :source="selectTravelOptions" @reflash="getList" />
+        <open-bill title="开票" :visible.sync="openBillVisible" :source="selectTravelBillOptions" @reflash="getList" />
 
         <settle-dialog
           title="结算"
@@ -331,8 +333,32 @@ export default {
         const { tripName, tripId } = item
         return [{ tripName, tripId }]
       } else {
-        return source
+        return source.filter(item => item.isSettle === '1')
       }
+    },
+    selectTravelBillOptions() {
+      const { selectOptions } = this
+      const { item, source } = selectOptions
+      if (item.id) {
+        const { tripName, tripId } = item
+        return [{ tripName, tripId }]
+      } else {
+        return source.filter(item => item.isInvoicing === '1')
+      }
+    },
+    settlementDisabled() {
+      const { source } = this.selectOptions
+      if (!source || !source.length) return true
+      const flag = source.some(item => item.isSettle === '1')
+      if (!flag) return true
+      return false
+    },
+    openBillDisabled() {
+      const { source } = this.selectOptions
+      if (!source || !source.length) return true
+      const flag = source.some(item => item.isInvoicing === '1')
+      if (!flag) return true
+      return false
     }
   },
   created() {
@@ -415,11 +441,13 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.selectOptions.source = selection.map(item => {
-        const { id, tripName, tripId } = item
+        const { id, tripName, tripId, isSettle, isInvoicing } = item
         return {
           id,
           tripName,
-          tripId
+          tripId,
+          isSettle,
+          isInvoicing
         }
       })
     },

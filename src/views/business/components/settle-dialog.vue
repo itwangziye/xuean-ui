@@ -11,10 +11,10 @@
           </div>
         </div>
       </el-form-item>
-      <el-form-item label="收款对象" prop="billObj" :rules="[{required: true, message: '请输入发票号码'}]">
+      <el-form-item label="收款对象" prop="billObj" :rules="[{required: true, message: '请输入收款对象'}]">
         <el-input v-model="form.billObj" placeholder="请输入收款对象" />
       </el-form-item>
-      <el-form-item label="收款方式" prop="payType" :rules="[{required: true, message: '请输入发票单位'}]">
+      <el-form-item label="收款方式" prop="payType" :rules="[{required: true, message: '请输入收款方式'}]">
         <el-select v-model="form.payType" placeholder="请选择收款方式">
           <el-option label="现金" value="1" />
           <el-option label="支付宝" value="2" />
@@ -22,14 +22,14 @@
           <el-option label="对公账户" value="4" />
         </el-select>
       </el-form-item>
-      <el-form-item v-if="currentBillType == 1" label="实付金额(￥)" prop="income" :rules="[{required: true, message: '请输入发票金额(￥)'}]">
-        <el-input v-model="form.income" placeholder="请输入发票金额(￥)" />
+      <el-form-item v-if="currentBillType == 1" label="实付金额(￥)" prop="income" :rules="[{required: true, message: '请输入实付金额(￥)'}]">
+        <el-input v-model="form.income" placeholder="请输入实付金额(￥)" />
       </el-form-item>
-      <el-form-item v-else label="实付金额(￥)" prop="payOut" :rules="[{required: true, message: '请输入发票金额(￥)'}]">
-        <el-input v-model="form.payOut" placeholder="请输入发票金额(￥)" />
+      <el-form-item v-else label="实付金额(￥)" prop="payOut" :rules="[{required: true, message: '请输入实付金额'}]">
+        <el-input v-model="form.payOut" placeholder="请输入实付金额" />
       </el-form-item>
-      <el-form-item label="经办人" prop="operatorName" :rules="[{required: true, message: '请输入发票单位'}]">
-        <el-input v-model="form.operatorName" placeholder="请输入发票单位" />
+      <el-form-item label="经办人" prop="operatorName" :rules="[{required: true, message: '请输入经办人'}]">
+        <el-input v-model="form.operatorName" placeholder="请输入经办人" />
       </el-form-item>
       <el-form-item label="收款备注" prop="remark">
         <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
