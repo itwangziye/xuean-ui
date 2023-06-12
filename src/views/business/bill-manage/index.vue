@@ -88,7 +88,7 @@
         >
           <!-- <el-table-column type="selection" width="55" align="center" /> -->
           <el-table-column label="编号" prop="id" width="50" />
-          <el-table-column label="发票号码" prop="invoiceId" min-width="180" :show-overflow-tooltip="true" />
+          <el-table-column label="发票号码" prop="invoiceId" min-width="180" />
           <el-table-column label="关联行程" prop="tripId" min-width="180" />
           <el-table-column label="发票单位" prop="invoiceCompany" min-width="180" />
           <el-table-column label="发票金额(￥)" prop="money" width="100" />

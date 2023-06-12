@@ -126,7 +126,7 @@
           border
           @selection-change="handleSelectionChange"
         >
-          <el-table-column label="流水编号" prop="billId" min-width="180" :show-overflow-tooltip="true" />
+          <el-table-column label="流水编号" prop="billId" min-width="180" />
           <el-table-column label="流水类型" prop="billType" width="100" :formatter="(row, column, cellValue, index) => cellValue == 1 ? '车费结算': '返差'" />
           <el-table-column label="交易对象" prop="billObj" min-width="180" />
           <el-table-column label="关联行程" prop="tripId" min-width="200" />
@@ -134,7 +134,7 @@
           <el-table-column label="收入（￥）" prop="income" width="100" />
           <el-table-column label="支出（￥）" prop="payOut" width="100" />
           <el-table-column label="经办人" prop="operatorName" width="100" />
-          <el-table-column label="流水备注" prop="remark" min-width="200" />
+          <el-table-column label="流水备注" prop="remark" min-width="200" :show-overflow-tooltip="true" />
           <el-table-column label="创建时间" prop="createdAt" width="180">
             <template slot-scope="{row}">
               <span>{{ parseTime(row.createdAt) }}</span>
