@@ -176,7 +176,6 @@ export default {
       isEdit: false,
       // 日期范围
       dateRange: [],
-      menuOptionsAlert: '加载中，请稍后',
       // 查询参数
       queryParams: {
         pageIndex: 1,

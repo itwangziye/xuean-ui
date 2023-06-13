@@ -178,8 +178,15 @@
           </el-table-column>
         </el-table>
 
+        <div class="table__footer">
+          <span>总计收入（￥）：{{ totalMoney.Income }}</span>
+          <span>总计支出（￥）：{{ totalMoney.PayOut }}</span>
+          <span>净利润（￥）：{{ totalMoney.Profit }}</span>
+        </div>
+
         <pagination
           v-show="total>0"
+          class="pagination__footer"
           :total="total"
           :page.sync="queryParams.pageIndex"
           :limit.sync="queryParams.pageSize"
@@ -231,6 +238,7 @@ export default {
         remark: ''
       },
       tableData: [],
+      totalMoney: {},
       // 表单参数
       form: {},
       currentRow: {}
@@ -260,6 +268,7 @@ export default {
         response => {
           this.tableData = response.data.list
           this.total = response.data.count
+          this.totalMoney = response.data.totalMoney
           this.loading = false
         }
       )
@@ -366,6 +375,19 @@ export default {
   .sub__form__item {
     padding-left: 80px;
   }
+}
+
+.table__footer {
+  font-size: 14px;
+  padding-top: 15px;
+  span {
+    display: inline-block;
+    padding-right: 15px;
+  }
+}
+
+.pagination__footer {
+  margin-top: 0;
 }
 
 </style>

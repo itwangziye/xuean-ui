@@ -128,7 +128,7 @@
           <el-table-column label="行程编号" prop="tripId" width="180" />
           <el-table-column label="用车联系人" prop="carLink" min-width="100" :show-overflow-tooltip="true" />
           <el-table-column label="行程" prop="tripName" min-width="120" />
-          <el-table-column label="车辆编号" prop="carId" min-width="80" />
+          <el-table-column label="车辆编号" prop="carId" min-width="100" />
           <el-table-column label="司机姓名" prop="driverName" width="100" />
           <el-table-column label="单位经办人" prop="operatorName" min-width="100" :show-overflow-tooltip="true" />
           <el-table-column label="应付金额(￥)" prop="preMoney" width="100" />
@@ -170,22 +170,20 @@
           </el-table-column>
         </el-table>
 
-        <div class="home__footer">
-          <div class="table__footer">
-            <span>总计应收金额（￥）： {{ totalMoney.money1 }} </span>
-            <span>总计实收金额（￥）： {{ totalMoney.money2 }} </span>
-            <span>总计未收金额（￥）： {{ totalMoney.money3 }}</span>
-          </div>
-
-          <pagination
-            v-show="total > 0"
-            class="pagination__footer"
-            :total="total"
-            :page.sync="queryParams.pageIndex"
-            :limit.sync="queryParams.pageSize"
-            @pagination="getList"
-          />
+        <div class="table__footer">
+          <span>总计应收金额（￥）：{{ totalMoney.money1 }}</span>
+          <span>总计实收金额（￥）：{{ totalMoney.money2 }}</span>
+          <span>总计未收金额（￥）：{{ totalMoney.money3 }}</span>
         </div>
+
+        <pagination
+          v-show="total > 0"
+          class="pagination__footer"
+          :total="total"
+          :page.sync="queryParams.pageIndex"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
+        />
 
         <!-- 添加或修改行程配置对话框 -->
         <el-dialog v-if="open" :title="title" :visible.sync="open" width="500px" :close-on-click-modal="false">
@@ -578,21 +576,17 @@ export default {
   }
 }
 
-.home__footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 32px;
-  flex-wrap: wrap;
-  .table__footer {
-    font-size: 14px;
-    padding: 30px 20px 10px 0;
+.table__footer {
+  font-size: 14px;
+  padding-top: 15px;
+  span {
+    display: inline-block;
+    padding-right: 15px;
   }
-  .pagination__footer {
-    flex: 1;
-    margin: 0;
-    height: 32px;
-  }
+}
+
+.pagination__footer {
+  margin-top: 0;
 }
 
 .warn {
