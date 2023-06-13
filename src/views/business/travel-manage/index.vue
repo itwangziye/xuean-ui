@@ -150,12 +150,21 @@
               <span>{{ parseTime(scope.row.createdAt) }}</span>
             </template>
           </el-table-column>
+          <el-table-column
+            label="审核状态"
+            prop="tripStatus"
+            width="80"
+            :formatter="(row, column, cellValue, index) => Number(cellValue) === 1 ? '审核中' : Number(cellValue) === 2? '审核通过': '被驳回'"
+          />
           <el-table-column label="操作" align="left" class-name="small-padding fixed-width" width="220">
             <template slot-scope="{row}">
-              <el-button v-if="Number(row.tripStatus) === 1" v-permission="['admin']" size="mini" type="text" @click="handleConfirmTravel(row)">确认行程</el-button>
+              <template v-if="Number(row.tripStatus) === 1">
+                <el-button v-if="checkPermission(['admin'])" size="mini" type="text" @click="handleConfirmTravel(row)">确认行程</el-button>
+                <el-link v-else :underline="false" type="warning">正在审核,不允许操作</el-link>
+              </template>
               <el-button v-if="Number(row.isSettle) === 1 && Number(row.tripStatus) === 2" v-permisaction="['business:flowManage:add']" size="mini" type="text" @click="handleSettlement(row)">结算</el-button>
               <el-button v-if="Number(row.isInvoicing) === 1 && Number(row.tripStatus) === 2" v-permisaction="['business:billManage:add']" size="mini" type="text" @click="handleOpenBill(row)">开票</el-button>
-              <el-button v-if="Number(row.tripStatus) !== 1" v-permisaction="['business:travelManage:edit']" size="mini" type="text" @click="handleUpdate(row)">修改</el-button>
+              <el-button v-if="Number(row.tripStatus) !== 1" v-permisaction="['business:travelManage:edit']" :class="{warn: Number(row.tripStatus) === 3}" size="mini" type="text" @click="handleUpdate(row)">修改</el-button>
               <el-button v-if="checkPermission(['admin'])" v-permisaction="['business:travelManage:delete']" size="mini" type="text" @click="handleDelete(row)">删除</el-button>
             </template>
           </el-table-column>
@@ -584,5 +593,9 @@ export default {
     margin: 0;
     height: 32px;
   }
+}
+
+.warn {
+  color: #F56C6C;
 }
 </style>

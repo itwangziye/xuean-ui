@@ -142,16 +142,26 @@
             </template>
           </el-table-column>
           <el-table-column
+            label="审核状态"
+            prop="billStatus"
+            width="80"
+            :formatter="(row, column, cellValue, index) => Number(cellValue) === 1 ? '审核中' : Number(cellValue) === 2? '审核通过': '被驳回'"
+          />
+          <el-table-column
             label="操作"
             align="left"
             class-name="small-padding fixed-width"
             width="220"
           >
             <template slot-scope="{row}">
-              <el-button v-if="row.billStatus == 1" v-permission="['admin']" size="mini" type="text" @click="handleConfirmFlow(row)">确认流水</el-button>
+              <template v-if="Number(row.billStatus) === 1">
+                <el-button v-if="checkPermission(['admin'])" size="mini" type="text" @click="handleConfirmFlow(row)">确认流水</el-button>
+                <el-link v-else :underline="false" type="warning">正在审核,不允许操作</el-link>
+              </template>
               <el-button
                 v-if="checkPermission(['admin']) && Number(row.billStatus) === 1 || Number(row.billStatus) === 3"
                 v-permisaction="['business:flowManage:edit']"
+                :class="{warn: Number(row.billStatus) === 3}"
                 size="mini"
                 type="text"
                 @click="handleUpdate(row)"
@@ -348,7 +358,10 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.warn {
+  color: #F56C6C;
+}
 .add__form {
   .sub__form__item {
     padding-left: 80px;
