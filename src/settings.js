@@ -1,11 +1,11 @@
 module.exports = {
-  title: 'go-admin后台管理系统',
+  title: '学安后台管理系统',
 
   /**
    * @type {boolean} true | false
    * @description Whether show the settings right-panel
    */
-  showSettings: true,
+  showSettings: false,
 
   /**
    * 是否显示顶部导航

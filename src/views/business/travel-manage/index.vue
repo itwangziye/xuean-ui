@@ -126,7 +126,8 @@
         <el-table v-loading="loading" :data="tableData" border @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center" />
           <el-table-column label="行程编号" prop="tripId" width="180" />
-          <el-table-column label="用车联系人" prop="carLink" min-width="100" :show-overflow-tooltip="true" />
+          <el-table-column label="用车联系人" prop="carLink" min-width="100" />
+          <el-table-column label="用车单位" prop="carCustomer" min-width="100" />
           <el-table-column label="行程" prop="tripName" min-width="120" />
           <el-table-column label="车辆编号" prop="carId" min-width="100" />
           <el-table-column label="司机姓名" prop="driverName" width="100" />
@@ -190,6 +191,9 @@
           <el-form ref="form" class="add__form" :model="form" label-width="100px">
             <el-form-item label="用车联系人" prop="carLink" :rules="[{ required: true, message: '请输入用车联系人' }]">
               <el-input v-model="form.carLink" placeholder="请输入用车联系人" />
+            </el-form-item>
+            <el-form-item label="用车单位" prop="carCustomer" :rules="[{ required: true, message: '请输入用车单位' }]">
+              <el-input v-model="form.carCustomer" placeholder="请输入用车单位" />
             </el-form-item>
             <el-form-item label="行程" prop="tripName" :rules="[{ required: true, message: '请输入行程' }]">
               <el-input v-model="form.tripName" placeholder="请输入行程" />
