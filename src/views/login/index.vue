@@ -154,7 +154,7 @@
 
         <div class="lh">
           <a class="text-color" href="https://beian.miit.gov.cn" target="_blank">
-            沪ICP备XXXXXXXXX号-1
+            鄂ICP备2023002732号-2
           </a>
         </div>
         <div class="open-content-info">
