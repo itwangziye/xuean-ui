@@ -31,6 +31,9 @@
       <el-form-item label="经办人" prop="operatorName" :rules="[{required: true, message: '请输入经办人'}]">
         <el-input v-model="form.operatorName" placeholder="请输入经办人" />
       </el-form-item>
+      <el-form-item label="收款时间" prop="billDate" :rules="[{ required: true, message: '请选择收款时间' }]">
+        <el-date-picker v-model="form.billDate" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
+      </el-form-item>
       <el-form-item label="收款备注" prop="remark">
         <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
       </el-form-item>

@@ -93,7 +93,7 @@
           <el-table-column label="关联行程" prop="tripId" min-width="180" />
           <el-table-column label="发票单位" prop="invoiceCompany" min-width="180" />
           <el-table-column label="发票金额(￥)" prop="money" width="100" />
-
+          <el-table-column label="开票日期" prop="invoiceDate" width="180" />
           <el-table-column label="发票备注" prop="remark" min-width="200" :show-overflow-tooltip="true" />
           <el-table-column label="创建时间" prop="createdAt" width="180">
             <template slot-scope="{row}">

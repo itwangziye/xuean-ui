@@ -14,6 +14,9 @@
       <el-form-item label="发票号码" prop="invoiceId" :rules="[{required: true, message: '请输入发票号码'}]">
         <el-input v-model="form.invoiceId" placeholder="请输入发票号码" />
       </el-form-item>
+      <el-form-item label="开票时间" prop="invoiceDate" :rules="[{ required: true, message: '请选择开票时间' }]">
+        <el-date-picker v-model="form.invoiceDate" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
+      </el-form-item>
       <el-form-item label="发票单位" prop="invoiceCompany" :rules="[{required: true, message: '请输入发票单位'}]">
         <el-input v-model="form.invoiceCompany" placeholder="请输入发票单位" />
       </el-form-item>

@@ -34,6 +34,16 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
+          <el-form-item label="用车单位" prop="carCustomer">
+            <el-input
+              v-model="queryParams.carCustomer"
+              placeholder="请输入用车单位"
+              clearable
+              size="small"
+              style="width: 160px"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
           <el-form-item label="车辆编号" prop="carId">
             <el-input
               v-model="queryParams.carId"
@@ -129,6 +139,7 @@
           <el-table-column label="用车联系人" prop="carLink" min-width="100" />
           <el-table-column label="用车单位" prop="carCustomer" min-width="100" />
           <el-table-column label="行程" prop="tripName" min-width="120" />
+          <el-table-column label="租车日期" prop="tripDate" min-width="120" />
           <el-table-column label="车辆编号" prop="carId" min-width="100" />
           <el-table-column label="司机姓名" prop="driverName" width="100" />
           <el-table-column label="单位经办人" prop="operatorName" min-width="100" :show-overflow-tooltip="true" />
@@ -146,6 +157,8 @@
             width="80"
             :formatter="(row, column, cellValue, index) => Number(cellValue) === 2 ? '是' : '否'"
           />
+          <el-table-column label="行程备注" prop="tripMark" min-width="200" :show-overflow-tooltip="true" />
+
           <el-table-column label="创建时间" prop="createdAt" width="180">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.createdAt) }}</span>
@@ -198,6 +211,9 @@
             <el-form-item label="行程" prop="tripName" :rules="[{ required: true, message: '请输入行程' }]">
               <el-input v-model="form.tripName" placeholder="请输入行程" />
             </el-form-item>
+            <el-form-item label="租车时间" prop="tripDate" :rules="[{ required: true, message: '请输入行程' }]">
+              <el-date-picker v-model="form.tripDate" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
+            </el-form-item>
             <el-form-item label="车辆编号" prop="carId" :rules="[{ required: true, message: '请输入车辆编号' }]">
               <el-input v-model="form.carId" placeholder="请输入车辆编号" />
             </el-form-item>
@@ -209,6 +225,10 @@
             </el-form-item>
             <el-form-item label="应付金额" prop="preMoney" :rules="[{ required: true, message: '请输入应付金额(￥)' }]">
               <el-input-number v-model="form.preMoney" controls-position="right" :min="0" />
+            </el-form-item>
+
+            <el-form-item label="行程备注" prop="tripMark">
+              <el-input v-model="form.tripMark" type="textarea" placeholder="请输入备注" />
             </el-form-item>
 
             <template v-if="!isEdit">
@@ -261,7 +281,7 @@
                 >
                   <el-input v-model="form.money" placeholder="请输入发票金额(￥)" />
                 </el-form-item>
-                <el-form-item class="sub__form__item" label="备注" prop="remark">
+                <el-form-item class="sub__form__item" label="发票备注" prop="remark">
                   <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
                 </el-form-item>
               </template>

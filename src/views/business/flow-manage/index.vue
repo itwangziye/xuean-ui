@@ -135,6 +135,7 @@
           <el-table-column label="收入（￥）" prop="income" width="100" />
           <el-table-column label="支出（￥）" prop="payOut" width="100" />
           <el-table-column label="经办人" prop="operatorName" width="100" />
+          <el-table-column label="收款时间" prop="billDate" width="180" />
           <el-table-column label="流水备注" prop="remark" min-width="200" :show-overflow-tooltip="true" />
           <el-table-column label="创建时间" prop="createdAt" width="180">
             <template slot-scope="{row}">
