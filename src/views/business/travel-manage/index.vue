@@ -239,15 +239,26 @@
                 </el-radio-group>
               </el-form-item>
 
-              <el-form-item
-                v-if="form.isSettle == 2"
-                class="sub__form__item"
-                label="实付金额"
-                prop="payMoney"
-                :rules="[{ required: true, message: '请输入实付金额' }]"
-              >
-                <el-input v-model="form.payMoney" placeholder="请输入实付金额" />
-              </el-form-item>
+              <template v-if="form.isSettle == 2">
+                <el-form-item
+                  class="sub__form__item"
+                  label="实付金额"
+                  prop="payMoney"
+                  :rules="[{ required: true, message: '请输入实付金额' }]"
+                >
+                  <el-input v-model="form.payMoney" placeholder="请输入实付金额" />
+                </el-form-item>
+
+                <el-form-item
+                  class="sub__form__item"
+                  label="收款对象"
+                  prop="billObj"
+                  :rules="[{required: true, message: '请输入收款对象'}]"
+                >
+                  <el-input v-model="form.billObj" placeholder="请输入收款对象" />
+                </el-form-item>
+
+              </template>
 
               <el-form-item label="是否开票" prop="isInvoicing">
                 <el-radio-group v-model="form.isInvoicing">
